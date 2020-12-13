@@ -6,6 +6,7 @@
 </pre>
 Базовый шаблон app.blade.php:
 <pre>
+<code>
  <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -31,6 +32,7 @@
 @show
 </body>
 </html>
+</code>
 </pre>
 Маршрут в routes/web.php
 <pre>

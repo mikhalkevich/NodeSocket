@@ -1,11 +1,11 @@
 Для Laravel
-'''
+<pre> 
  cd laravel
  mkdir node
  git clone https://github.com/mikhalkevich/NodeSocket.git
-'''
+</pre>
 Базовый шаблон app.blade.php:
-'''
+<pre>
  <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -31,9 +31,9 @@
 @show
 </body>
 </html>
-'''
+</pre>
 Маршрут в routes/web.php
-'''
+<pre>
 Route::get('chat/{id?}', 'ChatController@getIndex');
-'''
+</pre>
 

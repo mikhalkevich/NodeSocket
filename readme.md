@@ -4,6 +4,7 @@
  mkdir node
  git clone https://github.com/mikhalkevich/NodeSocket.git
 </pre>
+Обратите внимание на файл chat.blade.php, который использует jwt-токен, и должен быть реализован в базовом шаблоне app.blade.php.
 Базовый шаблон app.blade.php:
 <pre>
 <code>
@@ -38,4 +39,5 @@
 <pre>
 Route::get('chat/{id?}', 'ChatController@getIndex');
 </pre>
+Аутентифиация пользователей в Laravel с использованием JWT - [JWT Laravel](http://erud.by/node_jwt_laravel) 
 

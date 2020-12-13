@@ -4,6 +4,22 @@
  mkdir node
  git clone https://github.com/mikhalkevich/NodeSocket.git
 </pre>
+Далее необходимо реализовать миграцию messages
+<pre>
+        Schema::create('messages', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('sender_id')->nullable();
+            $table->integer('user_id');
+            $table->text('body');
+            $table->string('status')->nullable();
+            $table->timestamps();
+        });
+</pre>
+После чего можно запускать socket.io сервер:
+<pre>
+ cd NodeSocket/server
+ node server.js
+</pre>
 Обратите внимание на файл chat.blade.php, который использует jwt-токен, и должен быть реализован в базовом шаблоне app.blade.php.
 Базовый шаблон app.blade.php:
 <pre>

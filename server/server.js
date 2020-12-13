@@ -17,31 +17,37 @@ var db = mysql.createConnection({
 io.on('connection', socketioJwt.authorize({
     secret: process.env.JWT_SECRET,
     timeout: 15000
-}));// When authenticated, send back name + email over socket
+}));
+
 io.on('authenticated', function (socket) {
-    myurl = url.parse(socket.decoded_token.iss);
+    let user = socket.decoded_token.sub;
+    let myurl = url.parse(socket.decoded_token.iss);
     path = myurl.pathname.split("/");
     send_id = path.slice(-1)[0];
     console.log(socket.decoded_token, socket.decoded_token.sub, myurl.pathname, send_id);
-    socket.emit('id', socket.decoded_token.sub);
     new_id = 0;
     new_id_new = 0;
     arr = [];
-    setInterval(function () {
-        query = 'SELECT * FROM messages WHERE sender_id = '+ socket.decoded_token.sub +' AND user_id = ' + send_id + ' OR ( user_id = '+ socket.decoded_token.sub +' AND sender_id = ' + send_id + ' ) ORDER BY id DESC LIMIT 1';
-        db.query(query, function(err, row){
+    //socket.emit('id', socket.decoded_token.sub);
+    query = 'SELECT * FROM messages WHERE sender_id = ' + socket.decoded_token.sub + ' AND user_id = ' + send_id + ' OR  user_id = ' + socket.decoded_token.sub + ' AND sender_id = ' + send_id + '  ORDER BY id DESC LIMIT 1';
+    db.query(query, function (err, row) {
+        if (row[0]) {
+            socket.emit('row' + send_id, row);
+            //console.log(row);
             new_id = row[0].id;
-           // console.log(row);
-           // socket.emit('row', row);
-            if (new_id_new != new_id) {
-                //socket.emit('echo', row[0].ID + ' --- --- \n');
+            setInterval(function () {
+                console.log(new_id, new_id_new);
                 new_id_new = new_id;
-                db.query(query, function (err, rows) {
-                    if (err) throw err;
-                    socket.emit('row', row);
+                db.query(query, function (err, row2) {
+                    new_id = row2[0].id;
+                    if (new_id_new != new_id) {
+                        console.log(row2);
+                        socket.emit('row' + send_id, row2);
+                    }
                 });
-            }
-        });
-    }, 2000);
+            }, 2000);
+        }
+    });
 });
+
 server.listen(3003);
